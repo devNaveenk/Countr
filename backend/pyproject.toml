@@ -11,6 +11,9 @@ dependencies = [
     "sqlalchemy>=2.0",
     "alembic>=1.14",
     "psycopg[binary]>=3.2",       # PostgreSQL driver
+    "bcrypt>=4.2",                # password hashing
+    "pyjwt>=2.10",                # access tokens
+    "email-validator>=2.2",       # pydantic EmailStr
 ]
 
 [project.optional-dependencies]

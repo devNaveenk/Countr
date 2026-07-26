@@ -20,9 +20,19 @@ export class ApiError extends Error {
   }
 }
 
+// Kept in lib (not features) so the client stays self-contained; must match the key in
+// features/auth/api.ts.
+const TOKEN_KEY = "countr.access_token";
+
+function authHeader(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  const token = localStorage.getItem(TOKEN_KEY);
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { "Content-Type": "application/json", ...init?.headers },
+    headers: { "Content-Type": "application/json", ...authHeader(), ...init?.headers },
     ...init,
   });
 

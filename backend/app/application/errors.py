@@ -14,3 +14,15 @@ class EmailAlreadyRegistered(ApplicationError):
 
 class InvalidCredentials(ApplicationError):
     pass
+
+
+class ProductNotFound(ApplicationError):
+    pass
+
+
+class BarcodeAlreadyExists(ApplicationError):
+    pass
+
+
+class InvalidStockAdjustment(ApplicationError):
+    """Raised when an adjustment would drive stock negative."""

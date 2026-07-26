@@ -13,12 +13,22 @@ from sqlalchemy.orm import Session
 
 from app.application.use_cases.authenticate_user import AuthenticateUser
 from app.application.use_cases.check_health import CheckHealth
+from app.application.use_cases.product_catalog import (
+    AdjustStock,
+    ArchiveProduct,
+    CreateProduct,
+    GetProduct,
+    ListProducts,
+    UpdateProduct,
+)
 from app.application.use_cases.register_user import RegisterUser
 from app.core.config import Settings, get_settings
 from app.domain.entities.user import User
+from app.domain.repositories.product_repository import ProductRepository
 from app.domain.security import PasswordHasher, TokenService
 from app.infrastructure.db.session import get_session
 from app.infrastructure.repositories.sql_health_repository import SqlHealthRepository
+from app.infrastructure.repositories.sql_product_repository import SqlProductRepository
 from app.infrastructure.repositories.sql_user_repository import SqlUserRepository
 from app.infrastructure.security.bcrypt_hasher import BcryptPasswordHasher
 from app.infrastructure.security.jwt_token_service import JwtTokenService
@@ -63,6 +73,44 @@ def authenticate_user_use_case(
     tokens: TokenService = Depends(token_service),
 ) -> AuthenticateUser:
     return AuthenticateUser(SqlUserRepository(session), hasher, tokens)
+
+
+# --- products ---
+
+def product_repository(session: Session = Depends(db_session)) -> ProductRepository:
+    return SqlProductRepository(session)
+
+
+def create_product_use_case(
+    repo: ProductRepository = Depends(product_repository),
+) -> CreateProduct:
+    return CreateProduct(repo)
+
+
+def list_products_use_case(
+    repo: ProductRepository = Depends(product_repository),
+) -> ListProducts:
+    return ListProducts(repo)
+
+
+def get_product_use_case(repo: ProductRepository = Depends(product_repository)) -> GetProduct:
+    return GetProduct(repo)
+
+
+def update_product_use_case(
+    repo: ProductRepository = Depends(product_repository),
+) -> UpdateProduct:
+    return UpdateProduct(repo)
+
+
+def archive_product_use_case(
+    repo: ProductRepository = Depends(product_repository),
+) -> ArchiveProduct:
+    return ArchiveProduct(repo)
+
+
+def adjust_stock_use_case(repo: ProductRepository = Depends(product_repository)) -> AdjustStock:
+    return AdjustStock(repo)
 
 
 # --- current user (protects routes) ---

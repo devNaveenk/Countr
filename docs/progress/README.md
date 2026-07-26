@@ -3,7 +3,7 @@
 Living status of decided work. Update this **whenever work starts or finishes** — docs and
 reality must not drift. For each item: what's done, what remains.
 
-_Last updated: 2026-07-26_
+_Last updated: 2026-07-26 (Products/catalog module shipped)_
 
 ## Legend
 ✅ done · 🟡 in progress · ⬜ not started · ⏸️ deferred (see ADR)
@@ -27,18 +27,20 @@ _Last updated: 2026-07-26_
 
 ## Phase 1 — Wedge module: Inventory + Billing/POS (ADR-0003)
 
-_High-level; broken into tasks when Phase 0 is done._
+| Area | Status | Notes |
+|------|--------|-------|
+| Auth + roles (owner, cashier) | ✅ | register/login/JWT, `/me`, protected routes; roles modeled |
+| Product catalog (items, barcode, category, unit, cost/sell price, tax) | ✅ | full CRUD backend + `/app/products` UI; search, low-stock filter, archive |
+| Stock levels & adjustments | ✅ | on-hand qty + guarded adjust (no negative); low-stock flag |
+| Stock-movement ledger (audit trail of every change) | ⬜ | next — replaces the simple on-hand counter |
+| POS / checkout screen (barcode entry, cart, tender) | ⬜ | next major module |
+| Receipts | ⬜ | |
+| Basic reports (sales, stock) | ⬜ | |
+| Sales tax integration | ⬜ | ADR when started (TaxJar/Avalara) |
+| Payments integration | ⬜ | ADR when started (Stripe/Square) |
 
-| Area | Status |
-|------|--------|
-| Product catalog (items, categories, barcodes, units, price) | ⬜ |
-| Stock levels & adjustments | ⬜ |
-| POS / checkout screen (fast barcode entry, cart, tender) | ⬜ |
-| Receipts | ⬜ |
-| Basic reports (sales, stock) | ⬜ |
-| Auth + roles (owner, cashier) | ⬜ |
-| Sales tax integration | ⬜ (ADR when started) |
-| Payments integration | ⬜ (ADR when started) |
+Backend tests: 14 passing (health, auth ×5, products ×7). All layered/SOLID; use-cases
+tested with fakes (no DB).
 
 ## Deferred (conscious — do not re-plan yet)
 

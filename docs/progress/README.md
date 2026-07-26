@@ -12,15 +12,18 @@ _Last updated: 2026-07-26_
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Project decisions captured as ADRs (0001–0007) | ✅ | `docs/decisions/` |
+| Project decisions captured as ADRs (0001–0008) | ✅ | `docs/decisions/` |
 | Docs structure (decisions / architecture / progress / guides) | ✅ | `docs/` |
 | Architecture + SOLID + folder-structure spec | ✅ | `docs/architecture/` |
 | Product folder created, separate from NocoBase | ✅ | `countr/` |
-| Backend/frontend directory skeleton | ✅ | dirs in place; apps not yet initialized |
-| Backend app initialized (FastAPI, deps, config, DB session) | ⬜ | next step |
-| Frontend app initialized (Next.js + TS) | ⬜ | next step |
-| Local dev setup guide | ⬜ | `docs/guides/` |
-| Git repo for Countr (separate from nocobase) | ⬜ | init + first commit |
+| Backend/frontend directory skeleton | ✅ | in place |
+| Backend app initialized (FastAPI, deps, config, DB session) | ✅ | venv + deps installed; `app.main:app` runs |
+| Working vertical slice (health: route→use-case→repo→DB port) | ✅ | `/api/v1/health` returns 200; unit tests pass |
+| Frontend app initialized (Next.js + TS + Tailwind) | ✅ | App Router, src dir, feature-based structure, typed API client |
+| Local dev setup guide | ✅ | `docs/guides/local-setup.md` |
+| Git repo for Countr (separate from nocobase) | ✅ | init + first commit `59d8814` (branch `main`) |
+| Remote for Countr repo (GitHub) | ⬜ | not created yet — decide account/org + repo name |
+| PostgreSQL running locally + first migration (Alembic) | ⬜ | health shows `degraded` until DB is up |
 
 ## Phase 1 — Wedge module: Inventory + Billing/POS (ADR-0003)
 

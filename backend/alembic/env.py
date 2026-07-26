@@ -14,6 +14,10 @@ from app.infrastructure.db.session import Base
 
 # Import all ORM models here so autogenerate can detect them.
 from app.infrastructure.db.models.product import ProductModel  # noqa: F401
+from app.infrastructure.db.models.purchase import (  # noqa: F401
+    PurchaseItemModel,
+    PurchaseModel,
+)
 from app.infrastructure.db.models.sale import SaleItemModel, SaleModel  # noqa: F401
 from app.infrastructure.db.models.user import UserModel  # noqa: F401
 

@@ -32,8 +32,8 @@ const NAV: NavItem[] = [
   { href: "/app", label: "Home", Icon: HomeIcon },
   { href: "/app/pos", label: "Sell", Icon: ReceiptIcon },
   { href: "/app/products", label: "Products", Icon: PackageIcon },
+  { href: "/app/buy", label: "Buy", Icon: CartIcon },
   { href: "/app/reports", label: "Reports", Icon: BarChartIcon },
-  { href: "/app/buy", label: "Buy", Icon: CartIcon, soon: true },
   { href: "/app/inventory", label: "Inventory", Icon: InboxIcon, soon: true },
 ];
 

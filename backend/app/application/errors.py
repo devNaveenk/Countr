@@ -38,3 +38,7 @@ class ProductInactive(ApplicationError):
 
 class InsufficientStock(ApplicationError):
     pass
+
+
+class EmptyPurchase(ApplicationError):
+    pass

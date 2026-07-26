@@ -36,7 +36,7 @@ const modules: Module[] = [
     Icon: BarChartIcon,
     href: "/app/reports",
   },
-  { key: "buy", title: "Buy", body: "Purchase & receive stock", Icon: CartIcon },
+  { key: "buy", title: "Buy", body: "Purchase & receive stock", Icon: CartIcon, href: "/app/buy" },
   { key: "inventory", title: "Inventory", body: "Track stock levels", Icon: InboxIcon },
 ];
 

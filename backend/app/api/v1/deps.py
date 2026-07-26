@@ -21,6 +21,8 @@ from app.application.use_cases.product_catalog import (
     ListProducts,
     UpdateProduct,
 )
+from app.application.use_cases.purchase_history import GetPurchase, ListRecentPurchases
+from app.application.use_cases.receive_stock import ReceiveStock
 from app.application.use_cases.checkout import Checkout
 from app.application.use_cases.register_user import RegisterUser
 from app.application.use_cases.sales_history import GetSale, ListRecentSales
@@ -28,12 +30,14 @@ from app.application.use_cases.store_report import GetStoreReport
 from app.core.config import Settings, get_settings
 from app.domain.entities.user import User
 from app.domain.repositories.product_repository import ProductRepository
+from app.domain.repositories.purchase_repository import PurchaseRepository
 from app.domain.repositories.report_repository import ReportRepository
 from app.domain.repositories.sale_repository import SaleRepository
 from app.domain.security import PasswordHasher, TokenService
 from app.infrastructure.db.session import get_session
 from app.infrastructure.repositories.sql_health_repository import SqlHealthRepository
 from app.infrastructure.repositories.sql_product_repository import SqlProductRepository
+from app.infrastructure.repositories.sql_purchase_repository import SqlPurchaseRepository
 from app.infrastructure.repositories.sql_report_repository import SqlReportRepository
 from app.infrastructure.repositories.sql_sale_repository import SqlSaleRepository
 from app.infrastructure.repositories.sql_user_repository import SqlUserRepository
@@ -140,6 +144,31 @@ def list_sales_use_case(sales: SaleRepository = Depends(sale_repository)) -> Lis
 
 def get_sale_use_case(sales: SaleRepository = Depends(sale_repository)) -> GetSale:
     return GetSale(sales)
+
+
+# --- purchases / receiving ---
+
+def purchase_repository(session: Session = Depends(db_session)) -> PurchaseRepository:
+    return SqlPurchaseRepository(session)
+
+
+def receive_stock_use_case(
+    products: ProductRepository = Depends(product_repository),
+    purchases: PurchaseRepository = Depends(purchase_repository),
+) -> ReceiveStock:
+    return ReceiveStock(products, purchases)
+
+
+def list_purchases_use_case(
+    purchases: PurchaseRepository = Depends(purchase_repository),
+) -> ListRecentPurchases:
+    return ListRecentPurchases(purchases)
+
+
+def get_purchase_use_case(
+    purchases: PurchaseRepository = Depends(purchase_repository),
+) -> GetPurchase:
+    return GetPurchase(purchases)
 
 
 # --- reports ---

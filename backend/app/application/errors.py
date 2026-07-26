@@ -26,3 +26,15 @@ class BarcodeAlreadyExists(ApplicationError):
 
 class InvalidStockAdjustment(ApplicationError):
     """Raised when an adjustment would drive stock negative."""
+
+
+class EmptyCart(ApplicationError):
+    pass
+
+
+class ProductInactive(ApplicationError):
+    pass
+
+
+class InsufficientStock(ApplicationError):
+    pass

@@ -21,7 +21,13 @@ type Module = {
 };
 
 const modules: Module[] = [
-  { key: "pos", title: "Point of Sale", body: "Ring up a sale", Icon: ReceiptIcon },
+  {
+    key: "pos",
+    title: "Point of Sale",
+    body: "Ring up a sale",
+    Icon: ReceiptIcon,
+    href: "/app/pos",
+  },
   {
     key: "catalog",
     title: "Products",

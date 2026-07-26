@@ -9,6 +9,7 @@ import { brand } from "@/lib/brand";
 
 const nav = [
   { href: "/app", label: "Home" },
+  { href: "/app/pos", label: "Sell" },
   { href: "/app/products", label: "Products" },
 ];
 

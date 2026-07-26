@@ -21,14 +21,18 @@ from app.application.use_cases.product_catalog import (
     ListProducts,
     UpdateProduct,
 )
+from app.application.use_cases.checkout import Checkout
 from app.application.use_cases.register_user import RegisterUser
+from app.application.use_cases.sales_history import GetSale, ListRecentSales
 from app.core.config import Settings, get_settings
 from app.domain.entities.user import User
 from app.domain.repositories.product_repository import ProductRepository
+from app.domain.repositories.sale_repository import SaleRepository
 from app.domain.security import PasswordHasher, TokenService
 from app.infrastructure.db.session import get_session
 from app.infrastructure.repositories.sql_health_repository import SqlHealthRepository
 from app.infrastructure.repositories.sql_product_repository import SqlProductRepository
+from app.infrastructure.repositories.sql_sale_repository import SqlSaleRepository
 from app.infrastructure.repositories.sql_user_repository import SqlUserRepository
 from app.infrastructure.security.bcrypt_hasher import BcryptPasswordHasher
 from app.infrastructure.security.jwt_token_service import JwtTokenService
@@ -111,6 +115,28 @@ def archive_product_use_case(
 
 def adjust_stock_use_case(repo: ProductRepository = Depends(product_repository)) -> AdjustStock:
     return AdjustStock(repo)
+
+
+# --- sales / checkout ---
+
+def sale_repository(session: Session = Depends(db_session)) -> SaleRepository:
+    return SqlSaleRepository(session)
+
+
+def checkout_use_case(
+    products: ProductRepository = Depends(product_repository),
+    sales: SaleRepository = Depends(sale_repository),
+    settings: Settings = Depends(get_settings),
+) -> Checkout:
+    return Checkout(products, sales, tax_rate=settings.default_tax_rate)
+
+
+def list_sales_use_case(sales: SaleRepository = Depends(sale_repository)) -> ListRecentSales:
+    return ListRecentSales(sales)
+
+
+def get_sale_use_case(sales: SaleRepository = Depends(sale_repository)) -> GetSale:
+    return GetSale(sales)
 
 
 # --- current user (protects routes) ---

@@ -4,6 +4,7 @@ Single source of truth for settings (SRP). Values come from environment / .env,
 validated by Pydantic. Nothing else in the app reads os.environ directly.
 """
 
+from decimal import Decimal
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -33,6 +34,10 @@ class Settings(BaseSettings):
     jwt_secret: str = "dev-only-change-me"
     jwt_algorithm: str = "HS256"
     access_token_ttl_minutes: int = 60 * 12
+
+    # Sales tax. A single flat rate for the wedge (e.g. 0.07 = 7%); tax-exempt products
+    # are never taxed. A real per-jurisdiction tax service (TaxJar/Avalara) comes later.
+    default_tax_rate: Decimal = Decimal("0")
 
     @property
     def cors_origins_list(self) -> list[str]:

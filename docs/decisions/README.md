@@ -37,3 +37,4 @@ Copy [`_template.md`](_template.md) for every new ADR.
 | [0006](0006-nocobase-as-reference.md) | Keep NocoBase as reference only | Accepted | 2026-07-26 |
 | [0007](0007-product-name.md) | Working product name: "Countr" (provisional) | Accepted | 2026-07-26 |
 | [0008](0008-brand-relationship.md) | Countr is a deliberate new retail vertical under BallotDA | Accepted | 2026-07-26 |
+| [0009](0009-ui-design-system.md) | UI design system — palette, typography, tokens | Accepted | 2026-07-26 |

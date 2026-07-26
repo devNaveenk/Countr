@@ -3,14 +3,14 @@
 import Link from "next/link";
 import type { SVGProps } from "react";
 
-import { AppHeader } from "@/components/layout/AppHeader";
 import {
   BarChartIcon,
+  CartIcon,
   InboxIcon,
   PackageIcon,
   ReceiptIcon,
 } from "@/components/ui/icons";
-import { useRequireAuth } from "@/features/auth/useRequireAuth";
+import { useCurrentUser } from "@/features/auth/user-context";
 
 type Module = {
   key: string;
@@ -21,13 +21,7 @@ type Module = {
 };
 
 const modules: Module[] = [
-  {
-    key: "pos",
-    title: "Point of Sale",
-    body: "Ring up a sale",
-    Icon: ReceiptIcon,
-    href: "/app/pos",
-  },
+  { key: "pos", title: "Point of Sale", body: "Ring up a sale", Icon: ReceiptIcon, href: "/app/pos" },
   {
     key: "catalog",
     title: "Products",
@@ -35,8 +29,15 @@ const modules: Module[] = [
     Icon: PackageIcon,
     href: "/app/products",
   },
+  {
+    key: "reports",
+    title: "Reports",
+    body: "Sales & best-sellers",
+    Icon: BarChartIcon,
+    href: "/app/reports",
+  },
+  { key: "buy", title: "Buy", body: "Purchase & receive stock", Icon: CartIcon },
   { key: "inventory", title: "Inventory", body: "Track stock levels", Icon: InboxIcon },
-  { key: "reports", title: "Reports", body: "Sales & best-sellers", Icon: BarChartIcon },
 ];
 
 function ModuleCard({ title, body, Icon, href }: Module) {
@@ -67,34 +68,22 @@ function ModuleCard({ title, body, Icon, href }: Module) {
 }
 
 export default function AppPage() {
-  const { user, checking } = useRequireAuth();
-
-  if (checking) {
-    return (
-      <main className="flex flex-1 items-center justify-center">
-        <p className="text-sm text-slate-500">Loading your store…</p>
-      </main>
-    );
-  }
+  const user = useCurrentUser();
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader user={user} />
+    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+      <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+        Welcome, {user?.full_name?.split(" ")[0]} 👋
+      </h1>
+      <p className="mt-1 text-slate-600">
+        This is your store workspace. Start with Products, then Sell.
+      </p>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-          Welcome, {user?.full_name?.split(" ")[0]} 👋
-        </h1>
-        <p className="mt-1 text-slate-600">
-          This is your store workspace. Start with Products; the rest arrive next.
-        </p>
-
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {modules.map(({ key, ...m }) => (
-            <ModuleCard key={key} {...m} />
-          ))}
-        </div>
-      </main>
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {modules.map(({ key, ...m }) => (
+          <ModuleCard key={key} {...m} />
+        ))}
+      </div>
     </div>
   );
 }

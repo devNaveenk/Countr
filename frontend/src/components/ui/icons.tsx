@@ -70,6 +70,39 @@ export const StoreIcon = (p: IconProps) => (
   </Base>
 );
 
+export const HomeIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M3 10.5 12 3l9 7.5" />
+    <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5" />
+  </Base>
+);
+
+export const CartIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="9" cy="20" r="1.4" />
+    <circle cx="18" cy="20" r="1.4" />
+    <path d="M2 3h2.2l2.1 12.3a1 1 0 0 0 1 .8h9.5a1 1 0 0 0 1-.8L20 7H5.2" />
+  </Base>
+);
+
+export const MenuIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 6h16M4 12h16M4 18h16" />
+  </Base>
+);
+
+export const ChevronLeftIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m15 6-6 6 6 6" />
+  </Base>
+);
+
+export const CloseIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6 6l12 12M18 6 6 18" />
+  </Base>
+);
+
 /** Countr logo mark — a shopping/checkout tick in a rounded square. */
 export function LogoMark({ className = "" }: { className?: string }) {
   return (

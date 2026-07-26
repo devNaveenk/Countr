@@ -24,14 +24,17 @@ from app.application.use_cases.product_catalog import (
 from app.application.use_cases.checkout import Checkout
 from app.application.use_cases.register_user import RegisterUser
 from app.application.use_cases.sales_history import GetSale, ListRecentSales
+from app.application.use_cases.store_report import GetStoreReport
 from app.core.config import Settings, get_settings
 from app.domain.entities.user import User
 from app.domain.repositories.product_repository import ProductRepository
+from app.domain.repositories.report_repository import ReportRepository
 from app.domain.repositories.sale_repository import SaleRepository
 from app.domain.security import PasswordHasher, TokenService
 from app.infrastructure.db.session import get_session
 from app.infrastructure.repositories.sql_health_repository import SqlHealthRepository
 from app.infrastructure.repositories.sql_product_repository import SqlProductRepository
+from app.infrastructure.repositories.sql_report_repository import SqlReportRepository
 from app.infrastructure.repositories.sql_sale_repository import SqlSaleRepository
 from app.infrastructure.repositories.sql_user_repository import SqlUserRepository
 from app.infrastructure.security.bcrypt_hasher import BcryptPasswordHasher
@@ -137,6 +140,19 @@ def list_sales_use_case(sales: SaleRepository = Depends(sale_repository)) -> Lis
 
 def get_sale_use_case(sales: SaleRepository = Depends(sale_repository)) -> GetSale:
     return GetSale(sales)
+
+
+# --- reports ---
+
+def report_repository(session: Session = Depends(db_session)) -> ReportRepository:
+    return SqlReportRepository(session)
+
+
+def store_report_use_case(
+    reports: ReportRepository = Depends(report_repository),
+    products: ProductRepository = Depends(product_repository),
+) -> GetStoreReport:
+    return GetStoreReport(reports, products)
 
 
 # --- current user (protects routes) ---

@@ -2,9 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { AppHeader } from "@/components/layout/AppHeader";
 import { PackageIcon } from "@/components/ui/icons";
-import { useRequireAuth } from "@/features/auth/useRequireAuth";
 import {
   adjustStock,
   archiveProduct,
@@ -23,7 +21,6 @@ function qty(v: string) {
 }
 
 export default function ProductsPage() {
-  const { user, checking } = useRequireAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -41,10 +38,9 @@ export default function ProductsPage() {
   }, [search, lowStockOnly]);
 
   useEffect(() => {
-    if (checking) return;
     const t = setTimeout(load, 200); // debounce search
     return () => clearTimeout(t);
-  }, [checking, load]);
+  }, [load]);
 
   function openAdd() {
     setEditing(undefined);
@@ -78,19 +74,9 @@ export default function ProductsPage() {
     await load();
   }
 
-  if (checking) {
-    return (
-      <main className="flex flex-1 items-center justify-center">
-        <p className="text-sm text-slate-500">Loading…</p>
-      </main>
-    );
-  }
-
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader user={user} />
-
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">
+    <>
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">Products</h1>
@@ -219,7 +205,7 @@ export default function ProductsPage() {
             </div>
           )}
         </div>
-      </main>
+      </div>
 
       {formOpen && (
         <ProductForm
@@ -231,6 +217,6 @@ export default function ProductsPage() {
           }}
         />
       )}
-    </div>
+    </>
   );
 }

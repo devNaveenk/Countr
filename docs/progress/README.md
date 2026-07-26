@@ -34,16 +34,22 @@ _Last updated: 2026-07-26 (Products/catalog module shipped)_
 | Stock levels & adjustments | ✅ | on-hand qty + guarded adjust (no negative); low-stock flag |
 | POS / checkout (cart, tax, tender, atomic stock decrement) | ✅ | `/app/pos`; sale + items recorded; row-locked stock; receipt |
 | Receipts | ✅ (basic) | on-screen receipt after each sale |
-| Sales history (recent sales, single receipt) | ✅ (API) | `/api/v1/sales`; UI history page next |
+| Sales history (recent sales, single receipt) | ✅ (API) | `/api/v1/sales`; UI history page later |
 | Flat sales tax (per-item exempt) | ✅ | `COUNTR_DEFAULT_TAX_RATE`; real tax API later |
+| Reports (revenue/sales/tax/items, best-sellers, low-stock) | ✅ | `/app/reports`; rolling 1/7/30-day windows |
+| Collapsible sidebar navigation (desktop collapse + mobile drawer) | ✅ | `AppShell`; `/app` layout guards once |
 | Stock-movement ledger (full audit trail) | ⬜ | later — replaces the simple on-hand counter |
-| Basic reports (daily sales, best-sellers, low-stock) | ⬜ | next first-layer feature |
-| Inventory view (dedicated) | ⬜ | next first-layer feature |
+| Buy / purchasing (receive stock, suppliers) | ⬜ | shown as "soon" in sidebar |
+| Dedicated Inventory view | ⬜ | shown as "soon" in sidebar |
 | Payments integration | ⬜ | ADR when started (Stripe/Square) |
 | Real sales-tax API | ⬜ | ADR when started (TaxJar/Avalara) |
 
 Backend tests: 20 passing (health, auth ×5, products ×7, checkout ×6). All layered/SOLID;
-use-cases tested with fakes (no DB).
+use-cases tested with fakes (no DB). Reports = SQL aggregates.
+
+First-layer feature set (POS · Products · Reports) is now in place, unified under the
+sidebar shell. Next: deepen (Buy/purchasing, Inventory view, sales history UI) or wire
+payments/tax integrations.
 
 ## Deferred (conscious — do not re-plan yet)
 

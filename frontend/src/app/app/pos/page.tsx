@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { AppHeader } from "@/components/layout/AppHeader";
-import { useRequireAuth } from "@/features/auth/useRequireAuth";
 import { listProducts, type Product } from "@/features/products/api";
 import {
   checkout,
@@ -23,7 +21,6 @@ function fmt(n: number) {
 }
 
 export default function PosPage() {
-  const { user, checking } = useRequireAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState<Record<string, CartLine>>({});
@@ -38,15 +35,13 @@ export default function PosPage() {
   }, [search]);
 
   useEffect(() => {
-    if (checking) return;
     getStoreSettings().then((s) => setTaxRate(Number(s.tax_rate))).catch(() => setTaxRate(0));
-  }, [checking]);
+  }, []);
 
   useEffect(() => {
-    if (checking) return;
     const t = setTimeout(loadProducts, 200);
     return () => clearTimeout(t);
-  }, [checking, loadProducts]);
+  }, [loadProducts]);
 
   const lines = Object.values(cart);
 
@@ -108,19 +103,9 @@ export default function PosPage() {
     }
   }
 
-  if (checking) {
-    return (
-      <main className="flex flex-1 items-center justify-center">
-        <p className="text-sm text-slate-500">Loading…</p>
-      </main>
-    );
-  }
-
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppHeader user={user} />
-
-      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_380px]">
+    <>
+      <main className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_380px]">
         {/* Product picker */}
         <section>
           <input
@@ -252,7 +237,7 @@ export default function PosPage() {
       </main>
 
       {receipt && <ReceiptModal sale={receipt} onClose={() => setReceipt(null)} />}
-    </div>
+    </>
   );
 }
 

@@ -34,8 +34,9 @@ Copy [`_template.md`](_template.md) for every new ADR.
 | [0003](0003-wedge-module.md) | First module: Inventory + Billing/POS | Accepted | 2026-07-26 |
 | [0004](0004-target-niche.md) | First niche: grocery / convenience stores | Accepted | 2026-07-26 |
 | [0005](0005-tech-stack.md) | Tech stack: Next.js + FastAPI + PostgreSQL | Accepted | 2026-07-26 |
-| [0006](0006-nocobase-as-reference.md) | Keep NocoBase as reference only | Accepted | 2026-07-26 |
+| [0006](0006-nocobase-as-reference.md) | Keep NocoBase as reference only | Superseded by 0011 | 2026-07-26 |
 | [0007](0007-product-name.md) | Working product name: "Countr" (provisional) | Accepted | 2026-07-26 |
 | [0008](0008-brand-relationship.md) | Countr is a deliberate new retail vertical under BallotDA | Accepted | 2026-07-26 |
 | [0009](0009-ui-design-system.md) | UI design system — palette, typography, tokens | Accepted | 2026-07-26 |
 | [0010](0010-stock-movement-ledger.md) | Stock-movement ledger at the persistence boundary | Accepted | 2026-07-26 |
+| [0011](0011-remove-nocobase-reference.md) | Remove the NocoBase reference folder (supersedes 0006) | Accepted | 2026-07-26 |

@@ -18,7 +18,10 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title=f"{settings.app_name} API",
         version=__version__,
-        description=f"{settings.app_name} — retail ERP for US stores (a {settings.app_vendor} product).",
+        description=(
+            f"{settings.app_name} — retail ERP for US stores "
+            f"(a {settings.app_vendor} product)."
+        ),
         debug=settings.debug,
     )
 

@@ -38,8 +38,10 @@ def receive_stock(
 ) -> PurchaseResponse:
     command = ReceiveStockCommand(
         lines=tuple(
-            ReceiveLine(product_id=l.product_id, quantity=l.quantity, unit_cost=l.unit_cost)
-            for l in body.lines
+            ReceiveLine(
+                product_id=line.product_id, quantity=line.quantity, unit_cost=line.unit_cost
+            )
+            for line in body.lines
         ),
         supplier_name=body.supplier_name,
         note=body.note,

@@ -33,8 +33,8 @@ const NAV: NavItem[] = [
   { href: "/app/pos", label: "Sell", Icon: ReceiptIcon },
   { href: "/app/products", label: "Products", Icon: PackageIcon },
   { href: "/app/buy", label: "Buy", Icon: CartIcon },
+  { href: "/app/inventory", label: "Inventory", Icon: InboxIcon },
   { href: "/app/reports", label: "Reports", Icon: BarChartIcon },
-  { href: "/app/inventory", label: "Inventory", Icon: InboxIcon, soon: true },
 ];
 
 const COLLAPSE_KEY = "countr.sidebar.collapsed";

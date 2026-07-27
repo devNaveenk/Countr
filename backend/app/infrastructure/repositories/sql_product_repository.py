@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.domain.entities.product import Product, ProductUnit
 from app.domain.repositories.product_repository import ProductRepository
 from app.infrastructure.db.models.product import ProductModel
+from app.infrastructure.db.stock_ledger import record_movement
 
 
 def _to_entity(row: ProductModel) -> Product:
@@ -56,6 +57,12 @@ class SqlProductRepository(ProductRepository):
             reorder_level=reorder_level,
         )
         self._session.add(row)
+        self._session.flush()  # assign id before logging the opening movement
+        if stock_quantity != 0:
+            record_movement(
+                self._session, product=row, delta=stock_quantity, reason="initial",
+                note="Opening stock",
+            )
         self._session.commit()
         self._session.refresh(row)
         return _to_entity(row)
@@ -128,11 +135,16 @@ class SqlProductRepository(ProductRepository):
         self._session.refresh(row)
         return _to_entity(row)
 
-    def adjust_stock(self, product_id: UUID, delta: Decimal) -> Product | None:
+    def adjust_stock(
+        self, product_id: UUID, delta: Decimal, *, note: str | None = None
+    ) -> Product | None:
         row = self._session.get(ProductModel, product_id)
         if row is None:
             return None
         row.stock_quantity = row.stock_quantity + delta
+        record_movement(
+            self._session, product=row, delta=delta, reason="adjustment", note=note
+        )
         self._session.commit()
         self._session.refresh(row)
         return _to_entity(row)

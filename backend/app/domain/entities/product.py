@@ -10,11 +10,11 @@ stays deliberate; a full stock-movement ledger arrives with the Inventory module
 
 from dataclasses import dataclass
 from decimal import Decimal
-from enum import Enum
+from enum import StrEnum
 from uuid import UUID
 
 
-class ProductUnit(str, Enum):
+class ProductUnit(StrEnum):
     EACH = "each"   # sold per item (a can, a bottle)
     LB = "lb"       # sold by weight (pounds) — US grocery
     KG = "kg"

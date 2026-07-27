@@ -4,7 +4,8 @@
 cost price to the latest unit cost, inserts the purchase + items, and commits once.
 """
 
-from uuid import UUID
+from decimal import Decimal
+from uuid import UUID, uuid4
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -14,6 +15,7 @@ from app.domain.entities.purchase import Purchase, PurchaseItem
 from app.domain.repositories.purchase_repository import PurchaseDraft, PurchaseRepository
 from app.infrastructure.db.models.product import ProductModel
 from app.infrastructure.db.models.purchase import PurchaseItemModel, PurchaseModel
+from app.infrastructure.db.stock_ledger import record_movement
 
 
 def _to_entity(row: PurchaseModel) -> Purchase:
@@ -45,11 +47,13 @@ class SqlPurchaseRepository(PurchaseRepository):
 
     def record(self, draft: PurchaseDraft) -> Purchase:
         purchase = PurchaseModel(
+            id=uuid4(),
             supplier_name=draft.supplier_name,
             received_by=draft.received_by,
             note=draft.note,
             total_cost=draft.total_cost,
         )
+        touched: list[tuple[ProductModel, Decimal]] = []
         for line in draft.lines:
             product = self._session.execute(
                 select(ProductModel).where(ProductModel.id == line.product_id).with_for_update()
@@ -59,6 +63,7 @@ class SqlPurchaseRepository(PurchaseRepository):
                 raise ProductNotFound(str(line.product_id))
             product.stock_quantity = product.stock_quantity + line.quantity
             product.cost_price = line.unit_cost  # keep cost current
+            touched.append((product, line.quantity))
 
             purchase.items.append(
                 PurchaseItemModel(
@@ -68,6 +73,13 @@ class SqlPurchaseRepository(PurchaseRepository):
                     quantity=line.quantity,
                     line_cost=line.line_cost,
                 )
+            )
+
+        # Ledger: one +qty movement per line, referencing this purchase (ADR-0010).
+        for product, qty in touched:
+            record_movement(
+                self._session, product=product, delta=qty, reason="purchase",
+                reference_type="purchase", reference_id=purchase.id,
             )
 
         self._session.add(purchase)

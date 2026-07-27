@@ -74,7 +74,7 @@ class FakeProductRepository:
         self._items[product_id] = updated
         return updated
 
-    def adjust_stock(self, product_id, delta):
+    def adjust_stock(self, product_id, delta, *, note=None):
         cur = self._items.get(product_id)
         if cur is None:
             return None

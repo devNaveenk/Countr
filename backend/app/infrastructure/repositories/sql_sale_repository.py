@@ -5,7 +5,8 @@ inserts the sale + items, and commits once. If anything fails, the whole thing r
 so stock is never decremented without a corresponding sale.
 """
 
-from uuid import UUID
+from decimal import Decimal
+from uuid import UUID, uuid4
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -15,6 +16,7 @@ from app.domain.entities.sale import PaymentMethod, Sale, SaleItem
 from app.domain.repositories.sale_repository import SaleDraft, SaleRepository
 from app.infrastructure.db.models.product import ProductModel
 from app.infrastructure.db.models.sale import SaleItemModel, SaleModel
+from app.infrastructure.db.stock_ledger import record_movement
 
 
 def _to_entity(row: SaleModel) -> Sale:
@@ -48,12 +50,14 @@ class SqlSaleRepository(SaleRepository):
 
     def record(self, draft: SaleDraft) -> Sale:
         sale = SaleModel(
+            id=uuid4(),
             cashier_id=draft.cashier_id,
             payment_method=draft.payment_method.value,
             subtotal=draft.subtotal,
             tax_total=draft.tax_total,
             total=draft.total,
         )
+        touched: list[tuple[ProductModel, Decimal]] = []
         for line in draft.lines:
             # Lock the product row so concurrent checkouts can't oversell.
             product = self._session.execute(
@@ -66,6 +70,7 @@ class SqlSaleRepository(SaleRepository):
                 self._session.rollback()
                 raise InsufficientStock(product.name)
             product.stock_quantity = product.stock_quantity - line.quantity
+            touched.append((product, line.quantity))
 
             sale.items.append(
                 SaleItemModel(
@@ -76,6 +81,13 @@ class SqlSaleRepository(SaleRepository):
                     line_total=line.line_total,
                     tax_exempt=line.tax_exempt,
                 )
+            )
+
+        # Ledger: one -qty movement per line, referencing this sale (ADR-0010).
+        for product, qty in touched:
+            record_movement(
+                self._session, product=product, delta=-qty, reason="sale",
+                reference_type="sale", reference_id=sale.id,
             )
 
         self._session.add(sale)

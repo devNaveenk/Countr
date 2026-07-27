@@ -116,7 +116,9 @@ def adjust_stock(
     use_case: AdjustStock = Depends(adjust_stock_use_case),
 ) -> ProductResponse:
     try:
-        return ProductResponse.from_entity(use_case.execute(product_id, delta=body.delta))
+        return ProductResponse.from_entity(
+            use_case.execute(product_id, delta=body.delta, note=body.note)
+        )
     except ProductNotFound as exc:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Product not found") from exc
     except InvalidStockAdjustment as exc:

@@ -34,7 +34,9 @@ def checkout(
     use_case: Checkout = Depends(checkout_use_case),
 ) -> SaleResponse:
     command = CheckoutCommand(
-        lines=tuple(CartLine(product_id=l.product_id, quantity=l.quantity) for l in body.lines),
+        lines=tuple(
+            CartLine(product_id=line.product_id, quantity=line.quantity) for line in body.lines
+        ),
         payment_method=body.payment_method,
     )
     try:

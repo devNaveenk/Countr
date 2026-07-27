@@ -7,11 +7,11 @@ to the catalog never change historical receipts. Money is Decimal throughout.
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
-from enum import Enum
+from enum import StrEnum
 from uuid import UUID
 
 
-class PaymentMethod(str, Enum):
+class PaymentMethod(StrEnum):
     CASH = "cash"
     CARD = "card"
 

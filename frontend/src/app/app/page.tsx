@@ -37,7 +37,13 @@ const modules: Module[] = [
     href: "/app/reports",
   },
   { key: "buy", title: "Buy", body: "Purchase & receive stock", Icon: CartIcon, href: "/app/buy" },
-  { key: "inventory", title: "Inventory", body: "Track stock levels", Icon: InboxIcon },
+  {
+    key: "inventory",
+    title: "Inventory",
+    body: "Track stock levels",
+    Icon: InboxIcon,
+    href: "/app/inventory",
+  },
 ];
 
 function ModuleCard({ title, body, Icon, href }: Module) {

@@ -55,8 +55,8 @@ export function updateProduct(id: string, input: ProductWriteInput): Promise<Pro
   return api.put<Product>(`/products/${id}`, input);
 }
 
-export function adjustStock(id: string, delta: string): Promise<Product> {
-  return api.post<Product>(`/products/${id}/stock`, { delta });
+export function adjustStock(id: string, delta: string, note?: string): Promise<Product> {
+  return api.post<Product>(`/products/${id}/stock`, { delta, note: note ?? null });
 }
 
 export function archiveProduct(id: string): Promise<Product> {

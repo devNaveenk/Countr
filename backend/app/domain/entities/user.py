@@ -6,11 +6,11 @@ cashier operates the till).
 """
 
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from uuid import UUID
 
 
-class UserRole(str, Enum):
+class UserRole(StrEnum):
     OWNER = "owner"
     CASHIER = "cashier"
 

@@ -24,8 +24,9 @@ class ProductCreateRequest(ProductWriteRequest):
 
 
 class StockAdjustmentRequest(BaseModel):
-    # positive to receive stock, negative to remove; not zero
+    # positive to add stock, negative to remove; not zero
     delta: Decimal = Field(max_digits=12, decimal_places=3)
+    note: str | None = Field(default=None, max_length=300)
 
 
 class ProductResponse(BaseModel):

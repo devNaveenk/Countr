@@ -19,6 +19,9 @@ from app.infrastructure.db.models.purchase import (  # noqa: F401
     PurchaseModel,
 )
 from app.infrastructure.db.models.sale import SaleItemModel, SaleModel  # noqa: F401
+from app.infrastructure.db.models.stock_movement import (  # noqa: F401
+    StockMovementModel,
+)
 from app.infrastructure.db.models.user import UserModel  # noqa: F401
 
 config = context.config

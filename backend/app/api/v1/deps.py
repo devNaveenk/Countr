@@ -13,6 +13,8 @@ from sqlalchemy.orm import Session
 
 from app.application.use_cases.authenticate_user import AuthenticateUser
 from app.application.use_cases.check_health import CheckHealth
+from app.application.use_cases.checkout import Checkout
+from app.application.use_cases.inventory import GetInventorySummary, ListStockMovements
 from app.application.use_cases.product_catalog import (
     AdjustStock,
     ArchiveProduct,
@@ -23,7 +25,6 @@ from app.application.use_cases.product_catalog import (
 )
 from app.application.use_cases.purchase_history import GetPurchase, ListRecentPurchases
 from app.application.use_cases.receive_stock import ReceiveStock
-from app.application.use_cases.checkout import Checkout
 from app.application.use_cases.register_user import RegisterUser
 from app.application.use_cases.sales_history import GetSale, ListRecentSales
 from app.application.use_cases.store_report import GetStoreReport
@@ -33,6 +34,7 @@ from app.domain.repositories.product_repository import ProductRepository
 from app.domain.repositories.purchase_repository import PurchaseRepository
 from app.domain.repositories.report_repository import ReportRepository
 from app.domain.repositories.sale_repository import SaleRepository
+from app.domain.repositories.stock_movement_repository import StockMovementRepository
 from app.domain.security import PasswordHasher, TokenService
 from app.infrastructure.db.session import get_session
 from app.infrastructure.repositories.sql_health_repository import SqlHealthRepository
@@ -40,6 +42,9 @@ from app.infrastructure.repositories.sql_product_repository import SqlProductRep
 from app.infrastructure.repositories.sql_purchase_repository import SqlPurchaseRepository
 from app.infrastructure.repositories.sql_report_repository import SqlReportRepository
 from app.infrastructure.repositories.sql_sale_repository import SqlSaleRepository
+from app.infrastructure.repositories.sql_stock_movement_repository import (
+    SqlStockMovementRepository,
+)
 from app.infrastructure.repositories.sql_user_repository import SqlUserRepository
 from app.infrastructure.security.bcrypt_hasher import BcryptPasswordHasher
 from app.infrastructure.security.jwt_token_service import JwtTokenService
@@ -169,6 +174,26 @@ def get_purchase_use_case(
     purchases: PurchaseRepository = Depends(purchase_repository),
 ) -> GetPurchase:
     return GetPurchase(purchases)
+
+
+# --- inventory ---
+
+def stock_movement_repository(
+    session: Session = Depends(db_session),
+) -> StockMovementRepository:
+    return SqlStockMovementRepository(session)
+
+
+def inventory_summary_use_case(
+    products: ProductRepository = Depends(product_repository),
+) -> GetInventorySummary:
+    return GetInventorySummary(products)
+
+
+def list_movements_use_case(
+    movements: StockMovementRepository = Depends(stock_movement_repository),
+) -> ListStockMovements:
+    return ListStockMovements(movements)
 
 
 # --- reports ---

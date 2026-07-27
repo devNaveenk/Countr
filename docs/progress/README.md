@@ -39,19 +39,20 @@ _Last updated: 2026-07-26 (Products/catalog module shipped)_
 | Reports (revenue/sales/tax/items, best-sellers, low-stock) | ✅ | `/app/reports`; rolling 1/7/30-day windows |
 | Collapsible sidebar navigation (desktop collapse + mobile drawer) | ✅ | `AppShell`; `/app` layout guards once |
 | Buy / receive stock (purchase, atomic stock+cost update, history) | ✅ | `/app/buy`; supplier as free text (managed suppliers later) |
-| Stock-movement ledger (full audit trail) | ⬜ | later — unifies sale/purchase/adjust into one ledger |
+| Stock-movement ledger (full audit trail) | ✅ | every stock change → movement row at persistence boundary (ADR-0010) |
+| Dedicated Inventory view (totals, stock value, adjust, history) | ✅ | `/app/inventory`; per-product movement timeline |
 | Managed suppliers (CRUD) | ⬜ | later depth on Buy |
-| Dedicated Inventory view | ⬜ | shown as "soon" in sidebar |
 | Sales history UI | ⬜ | API exists; screen later |
 | Payments integration | ⬜ | ADR when started (Stripe/Square) |
 | Real sales-tax API | ⬜ | ADR when started (TaxJar/Avalara) |
 
-Backend tests: 23 passing (health, auth ×5, products ×7, checkout ×6, receive-stock ×3).
-All layered/SOLID; use-cases tested with fakes (no DB). Reports = SQL aggregates.
+Backend gates: **ruff clean · mypy strict clean (75 files) · 23 tests passing** (health,
+auth ×5, products ×7, checkout ×6, receive-stock ×3). All layered/SOLID; use-cases tested
+with fakes (no DB). Reports/inventory summary = SQL aggregates + ledger.
 
-First-layer feature set — **Products · Sell (POS) · Buy · Reports** — is in place, unified
-under the sidebar shell. Next: deepen (managed suppliers, Inventory view, sales-history UI,
-stock-movement ledger) or wire payments/tax integrations.
+Core retail loop complete: **Products → Buy (stock in) → Sell/POS (stock out) → Inventory
+(ledger) → Reports**, unified under the sidebar shell. Next: managed suppliers,
+sales-history UI, or payments/tax integrations.
 
 ## Deferred (conscious — do not re-plan yet)
 

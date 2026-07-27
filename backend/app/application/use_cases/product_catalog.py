@@ -126,7 +126,7 @@ class AdjustStock:
     def __init__(self, products: ProductRepository) -> None:
         self._products = products
 
-    def execute(self, product_id: UUID, *, delta: Decimal) -> Product:
+    def execute(self, product_id: UUID, *, delta: Decimal, note: str | None = None) -> Product:
         current = self._products.get(product_id)
         if current is None:
             raise ProductNotFound(str(product_id))
@@ -134,6 +134,6 @@ class AdjustStock:
             raise InvalidStockAdjustment(
                 f"stock {current.stock_quantity} cannot absorb {delta}"
             )
-        adjusted = self._products.adjust_stock(product_id, delta)
+        adjusted = self._products.adjust_stock(product_id, delta, note=note)
         assert adjusted is not None
         return adjusted

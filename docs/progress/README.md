@@ -41,8 +41,8 @@ _Last updated: 2026-07-26 (Products/catalog module shipped)_
 | Buy / receive stock (purchase, atomic stock+cost update, history) | ✅ | `/app/buy`; supplier as free text (managed suppliers later) |
 | Stock-movement ledger (full audit trail) | ✅ | every stock change → movement row at persistence boundary (ADR-0010) |
 | Dedicated Inventory view (totals, stock value, adjust, history) | ✅ | `/app/inventory`; per-product movement timeline |
+| Sales history UI (list + receipt, today's total) | ✅ | `/app/sales`; taps into existing sales API |
 | Managed suppliers (CRUD) | ⬜ | later depth on Buy |
-| Sales history UI | ⬜ | API exists; screen later |
 | Payments integration | ⬜ | ADR when started (Stripe/Square) |
 | Real sales-tax API | ⬜ | ADR when started (TaxJar/Avalara) |
 

@@ -9,6 +9,7 @@ import {
   BarChartIcon,
   CartIcon,
   ChevronLeftIcon,
+  ClockIcon,
   CloseIcon,
   HomeIcon,
   InboxIcon,
@@ -31,6 +32,7 @@ type NavItem = {
 const NAV: NavItem[] = [
   { href: "/app", label: "Home", Icon: HomeIcon },
   { href: "/app/pos", label: "Sell", Icon: ReceiptIcon },
+  { href: "/app/sales", label: "Sales", Icon: ClockIcon },
   { href: "/app/products", label: "Products", Icon: PackageIcon },
   { href: "/app/buy", label: "Buy", Icon: CartIcon },
   { href: "/app/inventory", label: "Inventory", Icon: InboxIcon },
@@ -90,7 +92,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       >
         {/* Brand + toggles */}
         <div className="flex h-16 items-center gap-2 border-b border-slate-200 px-3">
-          <Link href="/app" className="flex min-w-0 items-center gap-2">
+          {/* Logo — hidden on desktop when collapsed (so the toggle can center); always on mobile */}
+          <Link
+            href="/app"
+            className={`flex min-w-0 items-center gap-2 ${collapsed ? "md:hidden" : ""}`}
+          >
             <LogoMark className="h-8 w-8 shrink-0" />
             {!collapsed && (
               <span className="truncate font-heading text-lg font-bold text-slate-900">
@@ -98,14 +104,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </span>
             )}
           </Link>
-          {/* desktop collapse */}
+          {/* desktop collapse toggle */}
           <button
             onClick={toggleCollapse}
-            className="ml-auto hidden rounded-md p-1.5 text-slate-500 hover:bg-slate-100 md:block"
+            className={`hidden rounded-md p-1.5 text-slate-500 hover:bg-slate-100 md:grid md:place-items-center ${
+              collapsed ? "md:mx-auto" : "md:ml-auto"
+            }`}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             title={collapsed ? "Expand" : "Collapse"}
           >
-            <ChevronLeftIcon className={`h-5 w-5 transition-transform ${collapsed ? "rotate-180" : ""}`} />
+            <ChevronLeftIcon
+              className={`h-5 w-5 transition-transform ${collapsed ? "rotate-180" : ""}`}
+            />
           </button>
           {/* mobile close */}
           <button
